@@ -1,0 +1,7 @@
+/search.db/*
+*.pyc
+*.db
+/flask/*
+/db_repository/*
+/tmp/*
+*.mo

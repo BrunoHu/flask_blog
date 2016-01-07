@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!-- extend from base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+<h1>注册</h1>
+<hr>
+<div class="row">
+<div class="col-md-12">
+<form class="form-horizontal" role="form" action="" method="post" name="login">
+    {{form.hidden_tag()}}
+    <div class="form-group">
+        <label for="inputEmail1" class="col-lg-2 control-label">昵称</label>
+        <div class="col-lg-10">
+        {{form.nickname(class="form-control", placeholder="在此输入昵称")}}
+        {% if form.errors.nickname%}
+        <div class="alert alert-info">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{form.errors.nickname[0]}}
+        </div>
+        {%endif%}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputPassword1" class="col-lg-2 control-label">密码</label>
+        <div class="col-lg-10">
+        {{form.password(class="form-control", placeholder="在此输入密码")}}
+        {% if form.errors.password%}
+        <div class="alert alert-info">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{form.errors.password[0]}}
+        </div>
+        {%endif%}
+        </div>
+
+    </div>
+    <div class="form-group">
+      <label for="confirm" class="col-lg-2 control-label">确认密码</label>
+      <div class="col-lg-10">
+      {{form.confirm(class="form-control", placeholder="再次输入密码")}}
+
+      </div>
+    </div>
+    <div class="form-group">
+        <div class="col-lg-offset-2 col-lg-10">
+        <button type="submit" class="btn btn-default">登录</button>
+        </div>
+    </div>
+</form>
+</div>
+</div>
+</div>
+
+
+
+
+{% endblock %}

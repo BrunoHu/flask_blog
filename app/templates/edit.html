@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+<h1>编辑个人资料</h1>
+<br>
+<div class="jumbotron">
+<form action="" method="post" name="edit">
+    {{form.hidden_tag()}}
+    <h3>关于自己:</h3>
+    <p>{{ form.about_me(cols = 64, rows = 5, placeholder="请尽情吹牛") }}</p>
+    <p><button class="btn btn-lg btn-primary" type="submit" value="save">保存</button></p>
+</form>
+</div>>
+</div>
+
+
+{% endblock %}

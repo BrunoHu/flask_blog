@@ -1,0 +1,79 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<script>
+    $(function () {
+        $('#collapseOne').on('shown.bs.collapse', function () {
+            $('#panel-head').text("收起");})
+        $('#collapseOne').on('hidden.bs.collapse', function () {
+            $('#panel-head').text("展开");})
+
+    });
+</script>
+
+{% for error in form.errors.post %}
+<div class="alert alert-info">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+{{error}}
+</div>
+{% endfor %}
+<div class="container">
+    <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion"
+          href="#collapseOne" id="panel-head" >
+          收起
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in">
+        <div class="panel-body">
+            <div class="jumbotron">
+            <h1>嘿嘿嘿, {{g.user.nickname}}!</h1>
+            <form action="" method="post" name="post">
+            {{form.hidden_tag()}}
+            <p>{{ form.post(cols = 48, rows = 4, placeholder="今天天气不错，说点什么吧") }}</p>
+            <p><button class="btn btn-lg btn-primary" type="submit" value="发布">发布</button></p>
+            </form>
+            </div>
+        </div>
+    </div>
+  </div>
+
+      <!-- Main component for a primary marketing message or call to action -->
+</div> <!-- /container -->
+
+<div class="container">
+    {% for post in posts.items %}
+<p>
+  {% include 'post.html' %}</b>
+</p>
+{% endfor %}
+
+
+<ul class="pagination-plain">
+{% if posts.has_prev %}
+    <li class="newer"><a href="{{ url_for('index', page = posts.prev_num) }}">← Newer</a></li>
+{% else %}
+    <li class="newer disabled">← Newer</li>
+{% endif %}
+
+<li style="text-align: center">{{posts.page}} of {{posts.pages}}</li>
+
+{% if posts.has_next %}
+    <li class="next pull-right"><a href="{{ url_for('index', page = posts.next_num) }}">Previous →</a></li>
+{% else %}
+    <li class="next pull-right disabled">Previous →</li>
+{% endif %}
+</ul>
+
+
+
+</div>
+
+
+
+{% endblock %}

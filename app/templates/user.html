@@ -1,0 +1,51 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+<div class="well well-large">
+        <div class="pull-right">
+            <img src="{{ user.avatar(150) }}" class="img-polaroid">
+        </div>
+        <h1>{{ user.nickname }}</h1>
+        {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+        {% if user.last_seen %}
+        <p>最近上线:{{ momentjs(user.last_seen).calendar() }}</p>
+        {% endif %}
+        <p>粉丝:{{ user.followers.count() - 1 }} | 关注: {{ user.followed.count() - 1 }} |
+        {% if user.id == g.user.id %}
+            <a href="{{ url_for('edit') }}">编辑个人资料</a>
+        {% elif not g.user.is_following(user) %}
+            <a href="{{ url_for('follow', nickname=user.nickname) }}">关注</a>
+        {% else %}
+            <a href="{{ url_for('unfollow', nickname=user.nickname) }}">不再关注</a>
+        {% endif %}
+        </p>
+</div>
+</div>
+
+<div class="container">
+    {% for post in posts.items %}
+<p>
+  {% include 'post.html' %}</b>
+</p>
+{% endfor %}
+
+
+<ul class="pagination-plain">
+{% if posts.has_prev %}
+    <li class="newer"><a href="{{ url_for('index', page = posts.prev_num) }}">← Newer</a></li>
+{% else %}
+    <li class="newer"><a href="#">← Newer</a></li>
+{% endif %}
+
+{% if posts.has_next %}
+    <li class="next pull-right"><a href="{{ url_for('index', page = posts.next_num) }}">Previous →</a></li>
+{% else %}
+    <li class="next pull-right"><a href="#">Previous →</a></li>
+{% endif %}
+</ul>
+
+</div>
+{% endblock %}
