@@ -21,10 +21,12 @@
 #### 进入flask_blog文件夹，建立虚拟环境，在虚拟环境中安装所需要的内容。
 > 建立虚拟环境:
 > `$virtualenv flask`(建议把环境叫这个名字，不然要改一些内容)
+
 > 安装各种库：
-> `$source /flask/bin/activate`
-> `$pip install -r requirements.txt`
-> `$deactivate`
+
+> ```$source /flask/bin/activate
+ $pip install -r requirements.txt
+ $deactivate```
 
 #### 更改网站的Key
 把`flask_blog/config.py`里的SECRET_KEY更改一下，内容随意。
@@ -32,6 +34,7 @@
 #### 建立数据库,运行程序
 > 初始化数据库
 > `$./db.create.py`
+
 > 运行程序
 > `$./run.py`
 
