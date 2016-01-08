@@ -33,17 +33,19 @@
 {% endfor %}
 
 
-<ul class="pagination-plain">
+<ul>
 {% if posts.has_prev %}
-    <li class="newer"><a href="{{ url_for('index', page = posts.prev_num) }}">← Newer</a></li>
+    <li style="width: 10%; display:block; float:left;"><a href="{{ url_for('index', page = posts.prev_num) }}">← Newer</a></li>
 {% else %}
-    <li class="newer"><a href="#">← Newer</a></li>
+    <li style="width: 10%; display:block; float:left;">← Newer</li>
 {% endif %}
 
+<li style="width: 80%; display:block; float:left;text-align: center;">{{posts.page}} of {{posts.pages}}</li>
+
 {% if posts.has_next %}
-    <li class="next pull-right"><a href="{{ url_for('index', page = posts.next_num) }}">Previous →</a></li>
+    <li style="width: 10%; display:block; float:left;"><a href="{{ url_for('index', page = posts.next_num) }}">Previous →</a></li>
 {% else %}
-    <li class="next pull-right"><a href="#">Previous →</a></li>
+    <li style="width: 10%; display:block; float:left;">Previous →</li>
 {% endif %}
 </ul>
 
