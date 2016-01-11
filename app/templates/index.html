@@ -6,16 +6,16 @@
 <script>
     $(function () {
         $('#collapseOne').on('shown.bs.collapse', function () {
-            $('#panel-head').text("收起");})
+            $('#panel-head1').text("收起");})
         $('#collapseOne').on('hidden.bs.collapse', function () {
-            $('#panel-head').text("展开");})
+            $('#panel-head1').text("展开");})
 
     });
     $(function () {
         $('#collapseTwo').on('shown.bs.collapse', function () {
-            $('#panel-head').text("收起");})
+            $('#panel-head2').text("收起");})
         $('#collapseTwo').on('hidden.bs.collapse', function () {
-            $('#panel-head').text("展开");})
+            $('#panel-head2').text("展开");})
 
     });
 </script>
@@ -31,7 +31,7 @@
     <div class="panel-heading">
       <h4 class="panel-title">
         <a data-toggle="collapse" data-parent="#accordion"
-          href="#collapseOne" id="panel-head" >
+          href="#collapseOne" id="panel-head1" >
           收起
         </a>
       </h4>
@@ -58,7 +58,7 @@
     <div class="panel-heading">
       <h4 class="panel-title">
         <a data-toggle="collapse" data-parent="#accordion"
-          href="#collapseTwo" id="panel-head" >
+          href="#collapseTwo" id="panel-head2" >
           收起
         </a>
       </h4>

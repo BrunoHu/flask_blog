@@ -20,7 +20,6 @@ def index(page=1):
         post = Post(body=form.post.data, timestamp=datetime.utcnow(), author=g.user)
         db.session.add(post)
         db.session.commit()
-        flash('Your post is now live!')
         return redirect(url_for('index'))
     posts = user.followed_posts().paginate(page, POSTS_PER_PAGE, False)
     return render_template("index.html", title='Home', form=form, user=user, posts=posts)
@@ -42,7 +41,6 @@ def login():
             remember_me = session['remember_me']
             session.pop('remember_me', None)
         login_user(user, remember = remember_me)
-        flash('Login requested for nickname=' + form.nickname.data + '", remember_me=' + str(form.remember_me.data))
         return redirect('/index')
     return render_template('login.html',
         title = 'Sign In',
@@ -86,7 +84,7 @@ def user(nickname, page=1):
     if user == None:
         flash(u'哎呀，找不到这个家伙')
         return redirect(url_for('index'))
-    posts = user.followed_posts().paginate(page, POSTS_PER_PAGE, False)
+    posts = user.posts.paginate(page, POSTS_PER_PAGE, False)
     return render_template('user.html', user=user, posts=posts)
 
 @app.route('/edit', methods=['GET', 'POST'])
@@ -97,7 +95,7 @@ def edit():
         g.user.about_me = form.about_me.data
         db.session.add(g.user)
         db.session.commit()
-        flash('change saved')
+        flash(u'修改成功')
         return redirect(url_for('edit'))
     else:
         form.about_me.data = g.user.about_me
@@ -109,18 +107,18 @@ def edit():
 def follow(nickname):
     user = User.query.filter_by(nickname=nickname).first()
     if user is None:
-        flash('User %s not found.' % nickname)
+        flash('用户 %s 不存在.' % nickname)
         return redirect(url_for('index'))
     if user == g.user:
-        flash('You can\'t follow yourself!')
+        flash('你不能关注自己')
         return redirect(url_for('user', nickname=nickname))
     u = g.user.follow(user)
     if u is None:
-        flash('Cannot follow ' + nickname + '.')
+        flash('无法关注'+nickname)
         return redirect(url_for('user', nickname=nickname))
     db.session.add(u)
     db.session.commit()
-    flash('You are now following ' + nickname + '!')
+    flash('成功关注' + nickname + '!')
     return redirect(url_for('user', nickname=nickname))
 
 @app.route('/unfollow/<nickname>')
@@ -128,18 +126,18 @@ def follow(nickname):
 def unfollow(nickname):
     user = User.query.filter_by(nickname=nickname).first()
     if user is None:
-        flash('User %s not found.' % nickname)
+        flash('用户 %s 不存在.' % nickname)
         return redirect(url_for('index'))
     if user == g.user:
-        flash('You can\'t unfollow yourself!')
+        flash('你不能取消关注自己')
         return redirect(url_for('user', nickname=nickname))
     u = g.user.unfollow(user)
     if u is None:
-        flash('Cannot unfollow ' + nickname + '.')
+        flash('无法取消关注'+nickname)
         return redirect(url_for('user', nickname=nickname))
     db.session.add(u)
     db.session.commit()
-    flash('You have stopped following ' + nickname + '.')
+    flash('您已取消关注' + nickname + '.')
     return redirect(url_for('user', nickname=nickname))
 
 @app.route('/search', methods = ['POST'])
@@ -165,6 +163,8 @@ def random_find():
     user = users[random_seed]
     return redirect(url_for('user', nickname=user.nickname))
 
-
+@app.route('/log')
+def log():
+    return render_template('log.html')
 
 
