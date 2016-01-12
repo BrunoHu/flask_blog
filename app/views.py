@@ -107,18 +107,18 @@ def edit():
 def follow(nickname):
     user = User.query.filter_by(nickname=nickname).first()
     if user is None:
-        flash('用户 %s 不存在.' % nickname)
+        flash(u'用户 %s 不存在.' % nickname)
         return redirect(url_for('index'))
     if user == g.user:
-        flash('你不能关注自己')
+        flash(u'你不能关注自己')
         return redirect(url_for('user', nickname=nickname))
     u = g.user.follow(user)
     if u is None:
-        flash('无法关注'+nickname)
+        flash(u'无法关注'+nickname)
         return redirect(url_for('user', nickname=nickname))
     db.session.add(u)
     db.session.commit()
-    flash('成功关注' + nickname + '!')
+    flash(u'成功关注' + nickname + '!')
     return redirect(url_for('user', nickname=nickname))
 
 @app.route('/unfollow/<nickname>')
@@ -126,18 +126,18 @@ def follow(nickname):
 def unfollow(nickname):
     user = User.query.filter_by(nickname=nickname).first()
     if user is None:
-        flash('用户 %s 不存在.' % nickname)
+        flash(u'用户 %s 不存在.' % nickname)
         return redirect(url_for('index'))
     if user == g.user:
-        flash('你不能取消关注自己')
+        flash(u'你不能取消关注自己')
         return redirect(url_for('user', nickname=nickname))
     u = g.user.unfollow(user)
     if u is None:
-        flash('无法取消关注'+nickname)
+        flash(u'无法取消关注'+nickname)
         return redirect(url_for('user', nickname=nickname))
     db.session.add(u)
     db.session.commit()
-    flash('您已取消关注' + nickname + '.')
+    flash(u'您已取消关注' + nickname + '.')
     return redirect(url_for('user', nickname=nickname))
 
 @app.route('/search', methods = ['POST'])
