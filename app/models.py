@@ -61,6 +61,16 @@ class User(db.Model):
     def followed_posts(self):
         return Post.query.join(followers, (followers.c.followed_id == Post.user_id)).filter(followers.c.follower_id == self.id).order_by(Post.timestamp.desc())
 
+    def user_to_json(self):
+        json_user = {
+            "user_id": self.id,
+            "nickname": self.nickname,
+            "about_me": self.about_me,
+            "last_seen": self.last_seen
+        }
+        return json_user
+
+
     def __repr__(self):
         return '<User %r>' % (self.nickname)
 
@@ -70,6 +80,15 @@ class Post(db.Model):
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def post_to_json(self):
+        json_post = {
+            "post_id": self.id,
+            "body": self.body,
+            "timestamp": self.timestamp,
+            "author": self.author.nickname
+        }
+        return json_post
 
     def __repr__(self):
         return '<Post %r>' % (self.body)

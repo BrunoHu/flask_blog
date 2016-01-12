@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>API v1.0使用说明</h1>
+    <hr>
+    <ul class="list-unstyled">
+        <li><h4>获取全部文章</h4>
+        <p><blockquote>$GET 115.28.23.216/api/posts/</blockquote></p>
+        <p>可以得到所有已发表的内容的json格式，其中json格式的内容如下：</p>
+        <pre>
+            {
+                "all posts": [
+                {
+                  "author": "user1",
+                  "body": "nice day",
+                  "post_id": 2,
+                  "timestamp": "Tue, 12 Jan 2016 08:55:06 GMT"
+                },
+                {
+                  "author": "user2",
+                  "body": "good day",
+                  "post_id": 1,
+                  "timestamp": "Mon, 11 Jan 2016 17:26:48 GMT"
+                }]
+            }</pre></li>
+        <li><h4>获取一个用户发表的所有文章</h4>
+        <p><blockquote>$GET 115.28.23.216/api/user/&lt;nickname&gt;/posts/</blockquote></p>
+        <p>&lt;nickname&gt;部分填入想查询的用户的昵称，就可以得到其所有发布的内容，格式同上。</p></li>
+        <li><h4>获取一个用户所关注的文章</h4>
+        <p><blockquote>$GET 115.28.23.216/api/user/&lt;nickname&gt;/followed_posts/</blockquote></p>
+        <p>&lt;nickname&gt;部分填入想查询的用户的昵称，就可以得到其所有关注的内容，也包括用户自己发布的，格式同上。</p></li>
+        <li><h4>获取一个用户关注的所有用户</h4>
+        <p><blockquote>$GET 115.28.23.216/api/user/&lt;nickname&gt;/followed/</blockquote></p>
+        <p>&lt;nickname&gt;部分填入想查询的用户的昵称，可以获得一个用户的关注列表（不包括自己），json格式如下</p>
+        <pre>
+            {
+              "followed": [
+                {
+                  "about_me": hehe,
+                  "last_seen": "Thu, 07 Jan 2016 13:05:46 GMT",
+                  "nickname": "user1",
+                  "user_id": 6
+                },
+                {
+                  "about_me": null,
+                  "last_seen": null,
+                  "nickname": "user2",
+                  "user_id": 5
+                }]
+            }</pre></li>
+        <hr>
+        <li>虽然不知道作出api有什么用，说不定那天闲来无事做配套的手机app就用了这个呢= =</li>
+    </ul>
+
+
+</div>
+{% endblock %}

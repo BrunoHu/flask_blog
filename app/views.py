@@ -1,7 +1,7 @@
 #!/flask/bin/python
 #coding:utf-8
 
-from flask import render_template, flash, redirect, session, url_for, request, g
+from flask import render_template, flash, redirect, session, url_for, request, g, jsonify
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm
 from .forms import LoginForm, RegisterForm, EditForm, PostForm, SearchForm
@@ -163,8 +163,37 @@ def random_find():
     user = users[random_seed]
     return redirect(url_for('user', nickname=user.nickname))
 
-@app.route('/log')
+@app.route('/documents/log')
 def log():
     return render_template('log.html')
 
+@app.route('/api/user/<nickname>/posts/')
+def get_posts(nickname):
+    user = User.query.filter_by(nickname=nickname).first()
+    posts = user.posts
+    return jsonify({'posts': [post.post_to_json() for post in posts]})
+
+@app.route('/api/user/<nickname>/followed_posts/')
+def all_followed_posts(nickname):
+    user = User.query.filter_by(nickname=nickname).first()
+    posts = user.followed_posts()
+    return jsonify({'followed posts': [post.post_to_json() for post in posts]})
+
+@app.route('/api/posts/')
+def all_posts():
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    return jsonify({'all posts': [post.post_to_json() for post in posts]})
+
+@app.route('/documents/api_v1.0')
+def api_v1():
+    return render_template('api_v1.html')
+
+@app.route('/api/user/<nickname>/followed/')
+def followed(nickname):
+    user = User.query.filter_by(nickname=nickname).first()
+    followed_people = []
+    for u in user.followed:
+        if u.nickname != nickname:
+            followed_people.append(u.user_to_json())
+    return jsonify({"followed": followed_people})
 
