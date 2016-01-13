@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script>
+    var tmp = {{words|safe}};
+    var speed = 100;
+    var n = -1;
+    var clock;
+    function run(){
+        n = n + 1;
+        if(n<{{length}}){
+        $('#expo').text(tmp[n]);
+        clock = setTimeout("run()",window.speed);}
+    }
+    $(function () {
+        $('#collapseTwo').on('shown.bs.collapse', function () {
+            $('#panel-head2').text("收起");})
+        $('#collapseTwo').on('hidden.bs.collapse', function () {
+            $('#panel-head2').text("全文");})
+
+    });
+</script>
+<div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong>新功能</strong>：实验功能spritz阅读，快速阅读的未来方向之一，点击开始试试吧。
+</div>
+<ul>
+<li style="display:block; float:left;width: 150px;"><select id="select" class="form-control">
+        <option value="150">每分钟400词</option>
+        <option value="120">每分钟500词</option>
+        <option value="100">每分钟600词</option>
+        <option value="80">每分钟750词</option>
+</select></li>
+
+<li style="display:block; float:left;"><button id="start" type="button" class="btn btn-primary">开始</button></li>
+<li style="display:block; float:left;"><button id="stop" type="button" class="btn btn-primary">暂停</button></li>
+<li style="display:block; float:left;"><button id="reset" type="button" class="btn btn-danger">重置</button></li>
+<li> </li>
+</ul>
+<hr>
+<h1 style="text-align: center" id="expo">start</h1>
+<hr>
+<div class="container">
+<p>本文来自扎克伯格给女儿max的一封信，全文{{length}}单词。</p>
+<div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion"
+          href="#collapseTwo" id="panel-head2" >
+          收起
+        </a>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse in">
+        <div class="panel-body">
+            <div class="jumbotron">
+            {% for para in paragraghs%}
+            <p class="hidden-xs">{{para}}</p>
+            <p class="visible-xs" style="font-size: 0.8em;">{{para}}</p>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    var b = $('#start');
+    var s = $('#stop');
+    var r = $('#reset')
+
+    s.hide();
+    r.hide();
+
+    b.click(function(){
+        s.show();
+        b.hide();
+        r.hide();
+        window.speed = $('#select option:selected').val();
+        run();
+    });
+    s.click(function(){
+        b.show();
+        r.show();
+        s.hide();
+        clearTimeout(clock);
+    });
+    r.click(function(){
+        r.hide();
+        b.show();
+        s.hide();
+        window.n = -1;
+        $('#expo').text('start');
+    })
+</script>
+{% endblock%}
