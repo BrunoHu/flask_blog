@@ -2,7 +2,10 @@
 
 {% block content %}
 <script>
-    var tmp = {{words|safe}};
+    var tmp=[];
+    {% for w in words %}
+    tmp.push("{{w|safe}}")
+    {% endfor %}
     var speed = 100;
     var n = -1;
     var clock;
@@ -38,10 +41,10 @@
 <li> </li>
 </ul>
 <hr>
-<h1 style="text-align: center" id="expo">start</h1>
+<h1 style="text-align: center" id="expo">{% if version == 'en'%}START{% else %}开始{% endif %}</h1>
 <hr>
 <div class="container">
-<p>本文来自扎克伯格给女儿max的一封信，全文{{length}}单词。</p>
+<p>本文来自扎克伯格给女儿max的一封信，全文{{length}}单词。{% if version == 'en'%}<a href="{{url_for('spritz', language="chinese")}}"><strong>试试中文版<strong></a>{% else %}<a href="{{url_for('spritz', language="english")}}"><strong>试试英文版<strong></a></p>{% endif %}
 <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">

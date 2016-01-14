@@ -9,6 +9,7 @@ from .models import User, Post
 from datetime import datetime
 from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS, MAX_INT
 import random
+import jieba
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 @app.route('/index/<int:page>', methods=['GET', 'POST'])
@@ -198,38 +199,25 @@ def followed(nickname):
             followed_people.append(u.user_to_json())
     return jsonify({"followed": followed_people})
 
-@app.route('/lab/spritz')
-def spritz():
-    paragraghs =[
-    '''Dear Max,''',
-    '''Your mother and I don't yet have the words to describe the hope you give us for the future. Your new life is full of promise, and we hope you will be happy and healthy so you can explore it fully. You've already given us a reason to reflect on the world we hope you live in. Like all parents, we want you to grow up in a world better than ours today.''',
-    '''While headlines often focus on what's wrong, in many ways the world is getting better. Health is improving. Poverty is shrinking. Knowledge is growing. People are connecting. Technological progress in every field means your life should be dramatically better than ours today.''',
-    '''We will do our part to make this happen, not only because we love you, but also because we have a moral responsibility to all children in the next generation.''',
-    '''We believe all lives have equal value, and that includes the many more people who will live in future generations than live today. Our society has an obligation to invest now to improve the lives of all those coming into this world, not just those already here.''',
-    '''But right now, we don't always collectively direct our resources at the biggest opportunities and problems your generation will face.''',
-    '''Consider disease. Today we spend about 50 times more as a society treating people who are sick than we invest in research so you won't get sick in the first place.''',
-    '''Medicine has only been a real science for less than 100 years, and we've already seen complete cures for some diseases and good progress for others. As technology accelerates, we have a real shot at preventing, curing or managing all or most of the rest in the next 100 years.''',
-    '''Today, most people die from five things -- heart disease, cancer, stroke, neurodegenerative and infectious diseases -- and we can make faster progress on these and other problems.''',
-    '''Once we recognize that your generation and your children's generation may not have to suffer from disease, we collectively have a responsibility to tilt our investments a bit more towards the future to Facebook.A letter to our daughtermake this reality. Your mother and I want to do our part.''',
-    '''Curing disease will take time. Over short periods of five or ten years, it may not seem like we're making much of a difference. But over the long term, seeds planted now will grow, and one day, you or your children will see what we can only imagine: a world without suffering from disease.''',
-    '''There are so many opportunities just like this. If society focuses more of its energy on these great challenges, we will leave your generation a much better world.''',
-    '''Our hopes for your generation focus on two ideas: advancing human potential and promoting equality.''',
-    '''Advancing human potential is about pushing the boundaries on how great a human life can be.''',
-    '''Can you learn and experience 100 times more than we do today?''',
-    '''Can our generation cure disease so you live much longer and healthier lives?''',
-    '''Can we connect the world so you have access to every idea, person and opportunity?''',
-    '''Can we harness more clean energy so you can invent things we can't conceive of today while protecting the environment?''',
-    '''Can we cultivate entrepreneurship so you can build any business and solve any challenge to grow peace and prosperity?''',
-    '''Promoting equality is about making sure everyone has access to these opportunities -- regardless of the nation, families or circumstances they are born into.''',
-    '''Our society must do this not only for justice or charity, but for the greatness of human progress.''',
-    '''Today we are robbed of the potential so many have to offer. The only way to achieve our full potential is to channel the talents, ideas and contributions of every person in the world.''',
-    '''Can our generation eliminate poverty and hunger?''',
-    '''Can we provide everyone with basic healthcare?''',
-    '''Can we build inclusive and welcoming communities?''',
-    '''Can we nurture peaceful and understanding relationships between people of all nations?''',
-    '''Can we truly empower everyone -- women, children, underrepresented minorities, immigrants and the unconnected?''']
-    article = ' '.join(paragraghs)
-    words = article.split(" ")
-    for i in range(len(words)):
-        words[i] = words[i].strip(' \n')
-    return render_template('spritz.html', paragraghs=paragraghs, words=words, length=len(words) )
+@app.route('/lab/spritz/<language>')
+def spritz(language="english"):
+    if language == 'english':
+        f = open('./app/static/file/article_eg.txt','r')
+        article = f.read()
+        f.close()
+        paragraghs = article.split("\n")
+        words = []
+        for para in paragraghs:
+            words.extend(para.split(' '))
+        return render_template('spritz.html', paragraghs=paragraghs, words=words, length=len(words), version='en' )
+    if language == 'chinese':
+        f = open('./app/static/file/article_ch.txt','r')
+        article = f.read()
+        f.close()
+        article = article.decode('utf-8')
+        paragraghs = article.split("\n")
+        re_attach_article = ""
+        for p in paragraghs:
+            re_attach_article += p
+        words = jieba.lcut(re_attach_article)
+        return render_template('spritz.html', paragraghs=paragraghs, words=words, length=len(words), version='ch' )
