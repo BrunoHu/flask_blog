@@ -93,7 +93,7 @@
         b.show();
         s.hide();
         window.n = -1;
-        $('#expo').text('start');
+        $('#expo').text('{% if version == 'en'%}START{% else %}开始{% endif %}');
     })
 </script>
 {% endblock%}

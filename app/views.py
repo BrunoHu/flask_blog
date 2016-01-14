@@ -199,8 +199,9 @@ def followed(nickname):
             followed_people.append(u.user_to_json())
     return jsonify({"followed": followed_people})
 
+@app.route('/lab/spritz')
 @app.route('/lab/spritz/<language>')
-def spritz(language="english"):
+def spritz(language="chinese"):
     if language == 'english':
         f = open('./app/static/file/article_eg.txt','r')
         article = f.read()
