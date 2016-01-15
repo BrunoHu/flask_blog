@@ -222,3 +222,15 @@ def spritz(language="chinese"):
             re_attach_article += p
         words = jieba.lcut(re_attach_article)
         return render_template('spritz.html', paragraghs=paragraghs, words=words, length=len(words), version='ch' )
+    if language == 'chinese_led':
+        f = open('./app/static/file/article_ch.txt','r')
+        article = f.read()
+        f.close()
+        clean_article = article.replace(' ','')
+        clean_article = clean_article.replace('\n', '')
+        clean_article = clean_article.decode('utf-8')
+        article = article.decode('utf-8')
+        paragraghs = article.split("\n")
+        words = list(clean_article)
+        return render_template('spritz.html', paragraghs=paragraghs, words=words, length=len(words), version='led')
+
