@@ -4,6 +4,6 @@
     <tr valign="top">
         <td width="50" height="50"><a href="{{url_for('user', nickname=post.author.nickname)}}"><img src="{{post.author.avatar(50)}}"></a></td>
         <td><p><a href="{{url_for('user', nickname = post.author.nickname)}}">{{post.author.nickname}}</a> 在 {{momentjs(post.timestamp).fromNow()}}发布:</p>
-        <p><strong>{{post.body}}</strong></p></td>
+        <p><strong>{{post.body|safe}}</strong></p></td>
     </tr>
 </table>

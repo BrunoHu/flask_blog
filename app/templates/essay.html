@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+<h1>{{essay.title}}</h1>
+<p style="font-size: 0.8em;"><a href="{{url_for('user',nickname=essay.author.nickname)}}">{{essay.author.nickname}}</a> 作于 {{ momentjs(essay.timestamp).calendar()}}</p>
+<hr>
+<div class="jumbotron">
+{{essay.body_html|safe}}
+</div>
+</div>
+
+{% endblock%}

@@ -4,8 +4,8 @@
 from flask import render_template, flash, redirect, session, url_for, request, g, jsonify
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm
-from .forms import LoginForm, RegisterForm, EditForm, PostForm, SearchForm
-from .models import User, Post
+from .forms import LoginForm, RegisterForm, EditForm, PostForm, SearchForm, EssayForm
+from .models import User, Post, Essay
 from datetime import datetime
 from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS, MAX_INT
 import random
@@ -234,3 +234,38 @@ def spritz(language="chinese"):
         words = list(clean_article)
         return render_template('spritz.html', paragraghs=paragraghs, words=words, length=len(words), version='led')
 
+@app.route('/writing', methods=['GET', 'POST'])
+@login_required
+def writing():
+    user = g.user
+    form = EssayForm()
+    if form.validate_on_submit():
+        time = datetime.utcnow()
+        essay = Essay(body=form.essay.data, title=form.title.data,timestamp=time, author=user)
+        db.session.add(essay)
+        db.session.commit()
+        post = Post(
+            body = u"发表了一篇文章---<a href='%s'>%s</a>"%(url_for('essay_title', title=form.title.data), form.title.data),
+            timestamp = time,
+            author = user
+            )
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template("writing.html", form=form, user=user)
+
+@app.route('/essay/<int:id>')
+def essay(id):
+    essay = Essay.query.get_or_404(id)
+    return render_template('essay.html', essay=essay)
+
+@app.route('/essay/title/<title>')
+def essay_title(title):
+    essay = Essay.query.filter_by(title=title).first()
+    return render_template('essay.html', essay=essay)
+
+@app.route('/essays/<nickname>')
+def essays(nickname):
+    user = User.query.filter_by(nickname=nickname).first()
+    essays = user.essays.order_by(Essay.timestamp.desc())
+    return render_template('essays.html', essays=essays)

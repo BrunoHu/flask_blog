@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong>学技能</strong>：正文可以用markdown语法写出有互联网风格的文章哦，并且下有实时预览，想要提升逼格可以<a href="http://www.jianshu.com/p/1e402922ee32/" class="alert-link">点我</a>看看怎么写～
+</div>
+<h2>写日志</h2>
+<hr>
+<div class="container">
+
+<div class="jumbotron hidden-xs">
+<form action="" role="form" method="post" name="essay">
+{{form.hidden_tag()}}
+<div class="form-group">
+<p>文章标题：</p>
+<p>{{ form.title(placeholder='title' ,style="width: 80%")}}</p>
+<p>正文：</p>
+<p>{{ form.essay(placeholder="今天天气不错，说点什么吧", rows=12,style="width: 80%") }}</p>
+{{ pagedown.include_pagedown() }}
+<p><button class="btn btn-lg btn-primary" type="submit" value="发布">发布</button></p>
+</div>
+</form>
+</div>
+
+<form action="" role="form" method="post" name="essay" class="visible-xs">
+{{form.hidden_tag()}}
+<div class="form-group">
+<p>文章标题：</p>
+<p>{{ form.title(placeholder='title' ,style="width: 80%")}}</p>
+<p>正文：</p>
+<p>{{ form.essay(placeholder="今天天气不错，说点什么吧", rows=12,style="width: 80%") }}</p>
+{{ pagedown.include_pagedown() }}
+<p><button class="btn btn-lg btn-primary" type="submit" value="发布">发布</button></p>
+</div>
+</form>
+
+
+</div>
+{% endblock %}

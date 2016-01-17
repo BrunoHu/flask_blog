@@ -48,8 +48,13 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                 {% if g.user.is_authenticated %}
-                <li><a href="{{ url_for('user', nickname = g.user.nickname) }}">个人资料</a></li>
-                <li><a href="{{ url_for('random_find')}}">试试手气</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">日志<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('writing')}}">写日志</a></li>
+                    <li><a href="{{ url_for('essays', nickname=g.user.nickname)}}">我的日志</a></li>
+                  </ul>
+                </li>
                 {% endif %}
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">实验功能<span class="caret"></span></a>
@@ -59,14 +64,12 @@
                     <li><a href="{{url_for('spritz',language="english")}}">spritz！（英文）</a></li>
                   </ul>
                 </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
                 {% if g.user.is_authenticated %}
                 <li class="hidden-xs"><form class="navbar-form" action="{{url_for('search')}}" method="post" name="search" role="search">
                 <div class="form-group">
                 <div class="input-group">
                 {{g.search_form.hidden_tag()}}
-                {{g.search_form.search(type="search", placeholder="search", class="form-control")}}
+                {{g.search_form.search(type="search", placeholder="search", class="form-control", size=2)}}
                 <span class="input-group-btn">
                 <button type="submit" class="btn float-left" id="addon"><span class="fui-search"></span></button>
                 </span>
@@ -85,7 +88,18 @@
                 </div>
                 </div>
                 </form></li>
-                <li><a href="{{ url_for('logout') }}">登出</a></li>
+                {% endif %}
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                {% if g.user.is_authenticated %}
+                <li class="dropdown">
+                  <a href="{{url_for('user',nickname=g.user.nickname)}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ g.user.avatar(size=20) }}"> 账户<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('random_find')}}">试试手气</a></li>
+                    <li><a href="{{ url_for('user', nickname = g.user.nickname) }}">个人资料</a></li>
+                    <li><a href="{{url_for('logout')}}">登出</a></li>
+                  </ul>
+                </li>
                 {% endif %}
                 </ul>
             </div>

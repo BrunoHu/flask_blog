@@ -1,7 +1,8 @@
 #coding:utf-8
 
 from flask.ext.wtf import Form
-from wtforms import StringField, BooleanField, TextAreaField, PasswordField
+from flask.ext.pagedown.fields import PageDownField
+from wtforms import StringField, BooleanField, TextAreaField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, EqualTo
 from app.models import User, Post
 
@@ -47,3 +48,7 @@ class PostForm(Form):
 class SearchForm(Form):
     search = StringField('search', validators=[DataRequired()])
 
+class EssayForm(Form):
+    essay = PageDownField('essay', validators=[DataRequired()])
+    title = StringField('title', validators=[Length(min=1, max=20)])
+    submit = SubmitField(u'提交')

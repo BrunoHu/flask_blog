@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>归档</h1>
+<hr>
+<div class="container">
+<ul class="list-unstyled">
+{%for essay in essays%}
+
+<li><p>{{momentjs(essay.timestamp).format('LL')}}---<a href="{{url_for('essay',id=essay.id)}}">{{essay.title}}</a></p></li>
+<hr>
+{% endfor %}
+</ul>
+</div>
+{% endblock %}

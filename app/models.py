@@ -1,5 +1,8 @@
 #coding:utf-8
 from app import app, db
+from markdown import markdown
+import bleach
+
 
 import sys
 if sys.version_info >= (3, 0):
@@ -19,7 +22,8 @@ class User(db.Model):
     password = db.Column(db.String(120), index=False, unique=False)
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime)
-    posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
+    essays = db.relationship('Essay', backref='author', lazy='dynamic')
     followed = db.relationship('User',
         secondary = followers,
         primaryjoin = (followers.c.follower_id == id),
@@ -93,5 +97,26 @@ class Post(db.Model):
     def __repr__(self):
         return '<Post %r>' % (self.body)
 
+class Essay(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String)
+    body = db.Column(db.String)
+    body_html = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    @staticmethod
+    def on_changed_body(target, value, oldvalue, initiator):
+        allowed_tags=['a','abbr','acronym','b','blockqoute','code','em','i','li','ol','pre','strong','ul','h1','h2','h3','p']
+        target.body_html = bleach.linkify(bleach.clean(
+            markdown(value, output_format='html'),
+            tags=allowed_tags, strip=True))
+
+
+    def __repr__(self):
+        return '<Essay No.%d>' % (self.id)
+
 if enable_search:
     whooshalchemy.whoosh_index(app, Post)
+
+db.event.listen(Essay.body, 'set', Essay.on_changed_body)
