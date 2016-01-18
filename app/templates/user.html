@@ -13,7 +13,7 @@
         {% if user.last_seen %}
         <p>最近上线:{{ momentjs(user.last_seen).calendar() }}</p>
         {% endif %}
-        <p>粉丝:{{ user.followers.count() - 1 }} | 关注: {{ user.followed.count() - 1 }} |
+        <p>粉丝:<span class="badge">{{ user.followers.count() - 1 }}</span> | 关注: <span class="badge">{{ user.followed.count() - 1 }}</span> |
         {% if user.id == g.user.id %}
             <a href="{{ url_for('edit') }}">编辑个人资料</a>
         {% elif not g.user.is_following(user) %}
@@ -26,28 +26,45 @@
 </div>
 
 <div class="container">
-    {% for post in posts.items %}
-<p>
-  {% include 'post.html' %}</b>
-</p>
-{% endfor %}
 
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active" style="text-align: center; width: 50%"><a href="#posts" aria-controls="posts" role="tab" data-toggle="tab">状态</a></li>
+    <li role="presentation" style="text-align: center; width: 50%"><a href="#essays" aria-controls="essays" role="tab" data-toggle="tab">日志</a></li>
 
-<ul>
-{% if posts.has_prev %}
-    <li style="width: 40%; display:block; float:left;text-align: left;font-size: 0.8em;"><a href="{{ url_for('user', nickname=user.nickname, page = posts.prev_num) }}">上一页</a></li>
-{% else %}
-    <li style="width: 40%; display:block; float:left;text-align: left;font-size: 0.8em;">上一页</li>
-{% endif %}
-
-<li style="width: 20%; display:block; float:left;text-align: center;font-size: 0.8em;">{{posts.page}}of{{posts.pages}}</li>
-
-{% if posts.has_next %}
-    <li style="width: 40%; display:block; float:left;text-align: right;font-size: 0.8em;"><a href="{{ url_for('user', nickname=user.nickname, page = posts.next_num) }}">下一页</a></li>
-{% else %}
-    <li style="width: 40%; display:block; float:left;text-align: right;font-size: 0.8em;">下一页</li>
-{% endif %}
 </ul>
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="posts">
+        {% for post in posts.items %}
+        <p>{% include 'post.html' %}</b></p>
+        {% endfor %}
+        <ul>
+        {% if posts.has_prev %}
+            <li style="width: 40%; display:block; float:left;text-align: left;font-size: 0.8em;"><a href="{{ url_for('user', nickname=user.nickname, page = posts.prev_num) }}">上一页</a></li>
+        {% else %}
+            <li style="width: 40%; display:block; float:left;text-align: left;font-size: 0.8em;">上一页</li>
+        {% endif %}
+
+        <li style="width: 20%; display:block; float:left;text-align: center;font-size: 0.8em;">{{posts.page}}of{{posts.pages}}</li>
+
+        {% if posts.has_next %}
+            <li style="width: 40%; display:block; float:left;text-align: right;font-size: 0.8em;"><a href="{{ url_for('user', nickname=user.nickname, page = posts.next_num) }}">下一页</a></li>
+        {% else %}
+            <li style="width: 40%; display:block; float:left;text-align: right;font-size: 0.8em;">下一页</li>
+        {% endif %}
+        </ul>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="essays">
+        <ul class="list-unstyled">
+        {%for essay in essays%}
+        <li><p>{{momentjs(essay.timestamp).format('LL')}}---<a href="{{url_for('essay',id=essay.id)}}">{{essay.title}}</a></p></li>
+        <hr>
+        {% endfor %}
+        </ul>
+    </div>
+
+</div>
+
+
 
 </div>
 {% endblock %}

@@ -10,6 +10,15 @@ from datetime import datetime
 from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS, MAX_INT
 import random
 import jieba
+
+
+
+@app.route('/test')
+def test():
+    return render_template('test.html')
+
+
+
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 @app.route('/index/<int:page>', methods=['GET', 'POST'])
@@ -87,7 +96,8 @@ def user(nickname, page=1):
         return redirect(url_for('index'))
 
     posts = user.posts.order_by(Post.timestamp.desc()).paginate(page, POSTS_PER_PAGE, False)
-    return render_template('user.html', user=user, posts=posts)
+    essays = user.essays.order_by(Essay.timestamp.desc())
+    return render_template('user.html', user=user, posts=posts, essays=essays)
 
 @app.route('/edit', methods=['GET', 'POST'])
 @login_required
@@ -269,3 +279,10 @@ def essays(nickname):
     user = User.query.filter_by(nickname=nickname).first()
     essays = user.essays.order_by(Essay.timestamp.desc())
     return render_template('essays.html', essays=essays)
+
+@app.route('/connections/<nickname>')
+def connections(nickname):
+    user = User.query.filter_by(nickname=nickname).first()
+    return render_template('connections.html', user=user)
+
+

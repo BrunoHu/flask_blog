@@ -55,6 +55,7 @@
                     <li><a href="{{ url_for('essays', nickname=g.user.nickname)}}">我的日志</a></li>
                   </ul>
                 </li>
+                <li><a href="{{ url_for('connections', nickname=g.user.nickname)}}">好友</a></li>
                 {% endif %}
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">实验功能<span class="caret"></span></a>

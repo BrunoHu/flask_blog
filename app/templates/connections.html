@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active" style="text-align: center; width: 50%"><a href="#follower" aria-controls="follower" role="tab" data-toggle="tab">谁关注了我</a></li>
+    <li role="presentation" style="text-align: center; width: 50%"><a href="#followed" aria-controls="followed" role="tab" data-toggle="tab">我关注了谁</a></li>
+
+</ul>
+
+
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="follower">
+        <ul class="list-unstyled list-inline">
+        {% for u in user.followers%}
+        <li style="width: 49%" class="hidden-xs">{% include 'user_mini.html' %}</li>
+        <li style="width: 99%" class="visible-xs">{% include 'user_mini.html' %}</li>
+        {% endfor %}
+        </ul>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="followed">
+        <ul class="list-unstyled list-inline">
+        {% for u in user.followed%}
+        <li style="width: 49%" class="hidden-xs">{% include 'user_mini.html' %}</li>
+        <li style="width: 99%" class="visible-xs">{% include 'user_mini.html' %}</li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
+</div>
+
+{% endblock%}
