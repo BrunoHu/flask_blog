@@ -2,7 +2,7 @@
 from app import app, db
 from markdown import markdown
 import bleach
-
+from werkzeug.security import generate_password_hash, check_password_hash
 
 import sys
 if sys.version_info >= (3, 0):
@@ -20,6 +20,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nickname = db.Column(db.String(64), index=True, unique=True)
     password = db.Column(db.String(120), index=False, unique=False)
+    hash_psw = db.Column(db.String(128))
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
@@ -45,6 +46,13 @@ class User(db.Model):
             return unicode(self.id)
         except NameError:
             return str(self.id)
+
+    def generate_psw(self, password):
+        self.hash_psw = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.hash_psw, password)
+
 
     def avatar(self, size):
         return 'http://7xpqi6.com1.z0.glb.clouddn.com/avatar' + str(int(self.id)%23 + 6) + '.png-size' + str(size)
