@@ -12,7 +12,7 @@ class LoginForm(Form):
     remember_me = BooleanField('remember_me', default=True)
 
     def validate_nickname(form, field):
-        user = User.query.filter_by(nickname=field.data).first()
+        user = User.query.filter_by(nickname=form.nickname.data).first()
         if user == None:
             field.errors.append(u'这个用户名不在我的大脑里')
             return False
