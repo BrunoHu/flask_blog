@@ -22,7 +22,7 @@ class LoginForm(Form):
         user = User.query.filter_by(nickname=form.nickname.data).first()
         if user == None:
             return False
-        if user.password != field.data:
+        if not user.verify_password(field.data):
             field.errors.append(u'密码错误')
             return False
         return True

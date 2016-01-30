@@ -60,7 +60,8 @@ def login():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        user = User(nickname=form.nickname.data, password=form.password.data)
+        user = User(nickname=form.nickname.data)
+        user.generate_psw(form.password.data)
         db.session.add(user)
         db.session.commit()
         db.session.add(user.follow(user))
