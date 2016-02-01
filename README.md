@@ -28,12 +28,26 @@
  $pip install -r requirements.txt
  $deactivate```
 
-#### 更改网站的Key
-把`flask_blog/config.py`里的SECRET_KEY更改一下，内容随意。
+#### 增加个人配置
 
-#### 建立数据库,运行程序
+在根目录下新建文件夹名字为`/instance`
+
+然后在这个文件夹中新建一个名字为`config.py`的文件，按下面的格式填上你的私密信息配置：
+```
+#coding:utf-8
+
+SECRET_KEY = 'you-will-never-guess'
+
+MAIL_SERVER = 'smtp.example.com.cn'
+MAIL_PORT = 25                  #国内的邮箱代理基本上端口都是25,但是国外的比如gmail可能有所不同，具体需要上网查询
+MAIL_USERNAME = 'example'       #你的邮箱帐号，不需要@以及后面的部分
+MAIL_PASSWORD = 'example'       #你的邮箱密码
+```
+
+#### 建立数据库，运行程序
 > 初始化数据库
 > `$./db.create.py`
+
 
 > 运行程序
 > `$./run.py`
@@ -44,5 +58,5 @@
 
 #### 其他
 * 里面如果修改了数据库的模型，可以直接运行`db_migrate.py`迁移数据库。
-* 部署到vps服务器像百度云的话后面会继续写。
+* 部署到vps服务器像阿里云的话后面会继续写。
 
