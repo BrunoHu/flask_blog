@@ -5,3 +5,4 @@
 /db_repository/*
 /tmp/*
 *.mo
+instance/

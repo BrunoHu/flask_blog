@@ -1,10 +1,8 @@
+#coding:utf-8
+
 import os
 
-
-
-
 CSRF_ENABLED = True
-SECRET_KEY = 'you-will-never-guess'
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -16,3 +14,6 @@ POSTS_PER_PAGE = 5
 WHOOSH_BASE = os.path.join(basedir, 'search.db')
 MAX_SEARCH_RESULTS = 50
 MAX_INT = 1000000
+
+MAIL_DEFAULT_SENDER = (u'Bavel管理员','bavel_arnold@sina.com')
+FLASKY_MAIL_SUBJECT_PREFIX = '[Bavel]'

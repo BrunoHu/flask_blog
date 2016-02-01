@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>账户管理</h1>
+<hr>
+<form class="form-horizontal" role="form" action="" method="post" name="email-conform">
+    {{form.hidden_tag()}}
+    {% if user.email == None %}
+        <div class="form-group">
+            <label for="inputEmail" class="col-lg-2 control-label">邮箱</label>
+            <div class="col-lg-6">
+            {{form.email(class_="form-control", placeholder="请输入待验证邮箱")}}
+            {% if form.errors.email%}
+                <div class="alert alert-info">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{form.errors.email[0]}}
+                </div>
+            {%endif%}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-offset-2 col-lg-10">
+            <button type="submit" class="btn btn-default">确认</button>
+            </div>
+        </div>
+    {% elif user.email_confirm %}
+        <div>
+            <div class="col-lg-2 control-label">邮箱</div>
+            <div class="col-lg-10">{{user.email}}<span class="label label-success">已验证</span></div>
+        </div>
+    {% else %}
+        <div>
+            <div class="col-lg-2 control-label">邮箱</div>
+            <div class="col-lg-10">{{user.email}}<span class="label label-warning">未验证</span></div>
+        </div>
+            <div class="col-lg-offset-2 col-lg-10">
+            <a href="{{url_for('reconfirm_email',email=user.email)}}" class="btn btn-default">验证邮箱</a>
+            </div>
+    {% endif %}
+</form>
+<hr>
+{% endblock%}
