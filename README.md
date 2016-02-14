@@ -56,7 +56,64 @@ MAIL_PASSWORD = 'example'       #你的邮箱密码
 
 打开浏览器，输入localhost：5000,就ok了。
 
+#### 开始部署
+
+现在虽然已经可以在本地进行浏览，但是我知道能让大家欣赏才是一个网站的宿命，现在就介绍一下简单的部署。
+
+1. 首先，你要有个服务器，推荐阿里云，学生身份还有优惠。
+
+2. 然后，为了更好管理，在virtualenv环境下安装gunicorn
+    ```
+    $source flask/bin/activate
+    (flask)$pip install gunicorn
+    (flask)$ deactivate
+    ```
+
+3. 更改 run.py,把run.py文件更改如下：
+    ```
+    #!flask/bin/python
+    #coding:utf-8
+    from app import app
+    from werkzeug.contrib.fixers import ProxyFix
+
+    app.wsgi_app = ProxyFix(app.wsgi_app)
+
+    if __name__ == "__main__":
+        app.run()
+    ```
+
+4. 安装并配置nginx
+    安装 `$apt-get install -y nginx-full`
+    配置 备份并打开文件`~/etc/nginx/sites-available/default`
+    把其中内内容如下配置：
+    ```
+    server{
+        listen 80;
+        server_name yourip; (比如我的就是115.28.23.216)
+        access_log /home/flask_blog/logs/access.log;
+        error_log /home/flask_blog/logs/error.log;(这两个日志文件要自己先创建，不然会报错)
+
+        location / {
+            proxy_pass http://127.0.0.1:8080;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwardor;
+        }
+    }
+    ```
+    接着重启 nginx：`$sudo service nginx restart`
+
+5. 启动应用
+    回到网站目录： `cd ~/home/flask_blog`
+    应用virtualenv环境： `source flask/bin/activate`
+    启动: `(flask)$gunicorn -b 127.0.0.1:8080 run:app`
+
+6. 现在就可以用浏览器访问或者用curl访问了。
+
+#### 更新
+
+如果要修改网站代码的话，可以先用`pkill gunicorn`杀死监听进程，然后再进行更改，完毕后再如上启动：`(flask)$gunicorn -b 127.0.0.1:8080 run:app`
+
 #### 其他
 * 里面如果修改了数据库的模型，可以直接运行`db_migrate.py`迁移数据库。
-* 部署到vps服务器像阿里云的话后面会继续写。
+
 
