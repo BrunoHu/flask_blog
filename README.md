@@ -60,7 +60,7 @@ MAIL_PASSWORD = 'example'       #你的邮箱密码
 
 现在虽然已经可以在本地进行浏览，但是我知道能让大家欣赏才是一个网站的宿命，现在就介绍一下简单的部署。
 
-1. 首先，你要有个服务器，推荐阿里云，学生身份还有优惠。
+1. 首先，你要有个服务器，推荐阿里云，学生身份还有优惠。如果你要直接用的话，可以直接clone这里的代码到服务器。
 
 2. 然后，为了更好管理，在virtualenv环境下安装gunicorn
     ```
@@ -83,6 +83,7 @@ MAIL_PASSWORD = 'example'       #你的邮箱密码
     ```
 
 4. 安装并配置nginx
+
     安装 `$apt-get install -y nginx-full`
     配置 备份并打开文件`~/etc/nginx/sites-available/default`
     把其中内内容如下配置：
@@ -103,6 +104,7 @@ MAIL_PASSWORD = 'example'       #你的邮箱密码
     接着重启 nginx：`$sudo service nginx restart`
 
 5. 启动应用
+
     回到网站目录： `cd ~/home/flask_blog`
     应用virtualenv环境： `source flask/bin/activate`
     启动: `(flask)$gunicorn -b 127.0.0.1:8080 run:app`
