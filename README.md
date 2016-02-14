@@ -84,8 +84,10 @@ MAIL_PASSWORD = 'example'       #你的邮箱密码
 
 4. 安装并配置nginx
 
-    安装 `$apt-get install -y nginx-full`
-    配置 备份并打开文件`~/etc/nginx/sites-available/default`
+    安装:`$apt-get install -y nginx-full`
+
+    配置:备份并打开文件`~/etc/nginx/sites-available/default`
+
     把其中内内容如下配置：
     ```
     server{
@@ -106,14 +108,18 @@ MAIL_PASSWORD = 'example'       #你的邮箱密码
 5. 启动应用
 
     回到网站目录： `cd ~/home/flask_blog`
+
     应用virtualenv环境： `source flask/bin/activate`
+
     启动: `(flask)$gunicorn -b 127.0.0.1:8080 run:app`
 
 6. 现在就可以用浏览器访问或者用curl访问了。
 
 #### 更新
 
-如果要修改网站代码的话，可以先用`pkill gunicorn`杀死监听进程，然后再进行更改，完毕后再如上启动：`(flask)$gunicorn -b 127.0.0.1:8080 run:app`
+如果要修改网站代码的话，可以先用`pkill gunicorn`杀死监听进程，然后再进行更改.
+
+完毕后再如上启动：`(flask)$gunicorn -b 127.0.0.1:8080 run:app`
 
 #### 其他
 * 里面如果修改了数据库的模型，可以直接运行`db_migrate.py`迁移数据库。
