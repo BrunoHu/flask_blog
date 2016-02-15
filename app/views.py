@@ -340,4 +340,7 @@ def connections(nickname):
     user = User.query.filter_by(nickname=nickname).first()
     return render_template('connections.html', user=user)
 
-
+@app.route('/resume')
+def resume():
+    # url = './app/static/file/' + filename
+    return render_template('pdf.html')
