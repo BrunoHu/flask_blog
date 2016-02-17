@@ -4,8 +4,7 @@
     <tr>
         <td><a href="{{url_for('user', nickname=u.nickname)}}"><img src="{{u.avatar(70)}}"></a></td>
         <td><p><a href="{{url_for('user', nickname = u.nickname)}}">{{u.nickname}}</a></p>
-        {% if u.about_me %}<p>{{ u.about_me }}</p>{% endif %}
-        <p>粉丝:<span class="badge">{{ u.followers.count() - 1 }}</span> | 关注: <span class="badge">{{ u.followed.count() - 1 }}</span></td>
+        <p>粉丝:<span class="badge">{{ u.followers.count() - 1 }}</span> | 关注: <span class="badge">{{ u.followed.count() - 1 }}</span></p></td>
     </tr>
     </table>
 

@@ -14,7 +14,7 @@
     <div role="tabpanel" class="tab-pane active" id="follower">
         <ul class="list-unstyled list-inline">
         {% for u in user.followers%}
-        <li style="width: 49%" class="hidden-xs">{% include 'user_mini.html' %}</li>
+        <li style="width: 32%" class="hidden-xs">{% include 'user_mini.html' %}</li>
         <li style="width: 99%" class="visible-xs">{% include 'user_mini.html' %}</li>
         {% endfor %}
         </ul>
@@ -22,7 +22,7 @@
     <div role="tabpanel" class="tab-pane" id="followed">
         <ul class="list-unstyled list-inline">
         {% for u in user.followed%}
-        <li style="width: 49%" class="hidden-xs">{% include 'user_mini.html' %}</li>
+        <li style="width: 32%" class="hidden-xs">{% include 'user_mini.html' %}</li>
         <li style="width: 99%" class="visible-xs">{% include 'user_mini.html' %}</li>
         {% endfor %}
         </ul>
