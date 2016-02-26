@@ -49,6 +49,19 @@
                   "user_id": 5
                 }]
             }</pre></li>
+        <li><h4>新的RESTful风格api</h4>
+        <p>新的api可以有GET,POST两个方法，GET是查看改用户的所有posts，POST是用api发表一篇post.使用这个api推荐用requests库．</p>
+        <p><pre>
+            import requests
+            import json
+
+            url = 'http://115.28.23.216/api/restful/posts/&lt;nickname&gt;' #尖括号部分填入想查询的用户名
+            result_of_get = requests.get(url)
+
+            data = {'body': 'your posts', 'api_key': 'your api_key'} #　your post为你想发表的内容，your api部分为你的api key，在账户管理里面有，只有api key和用户名对应才会成功post.
+            headers = {'content-type': 'application/json'}
+            result_of_post = request.post(url, data=json.dumps(data), headers=headers)
+        </pre></p>
         <hr>
         <li>虽然不知道作出api有什么用，说不定那天闲来无事做配套的手机app就用了这个呢= =</li>
     </ul>

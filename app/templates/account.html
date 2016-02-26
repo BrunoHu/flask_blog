@@ -3,6 +3,7 @@
 {% block content %}
 <h1>账户管理</h1>
 <hr>
+<div>
 <form class="form-horizontal" role="form" action="" method="post" name="email-conform">
     {{form.hidden_tag()}}
     {% if user.email == None %}
@@ -38,5 +39,14 @@
             </div>
     {% endif %}
 </form>
-<hr>
+</div>
+<br>
+<dl class="dl-horizontal">
+    <dt>API KEY</dt>
+    {% if user.api_key == None %}
+    <dd><a href="{{url_for('generate_api_key')}}">点此获取api序列号</a></dd>
+    {% else %}
+    <dd>{{user.api_key}}</dd>
+    {% endif %}
+</dl>
 {% endblock%}

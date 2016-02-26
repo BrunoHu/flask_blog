@@ -1,9 +1,10 @@
 #!/flask/bin/python
 #coding:utf-8
 
-from flask import render_template, flash, redirect, session, url_for, request, g, jsonify
+from flask import render_template, flash, redirect, session, url_for, request, g, jsonify, abort
 from flask.ext.login import login_user, logout_user, current_user, login_required
-from app import app, db, lm
+from flask.ext.restful import Resource, reqparse
+from app import app, db, lm, api
 from .forms import LoginForm, RegisterForm, EditForm, PostForm, SearchForm, EssayForm, EmailForm
 from .models import User, Post, Essay
 from .email import send_email
@@ -12,17 +13,7 @@ from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS, MAX_INT
 from itsdangerous import URLSafeTimedSerializer
 import random
 import jieba
-
-
-
-@app.route('/test')
-def test():
-    return render_template('test.html')
-@app.route('/sendmail')
-def sendmail():
-    send_email('bavel_arnold@sina.com','hello','mail/hello',user=g.user)
-    return redirect(url_for('index'))
-
+import hashlib
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -342,5 +333,42 @@ def connections(nickname):
 
 @app.route('/resume')
 def resume():
-    # url = './app/static/file/' + filename
     return render_template('pdf.html')
+
+@app.route('/generate_api_key')
+def generate_api_key():
+    g.user.generate_api_key()
+    db.session.add(g.user)
+    db.session.commit()
+    return redirect(url_for('account'))
+
+class PostListApi(Resource):
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('body', type=str, required=True, location='json')
+        self.reqparse.add_argument('api_key', type=str, required=True, location='json')
+        super(PostListApi, self).__init__()
+
+    def get(self, nickname):
+        user = User.query.filter_by(nickname=nickname).first()
+        if user:
+            return jsonify({'posts': [post.post_to_json() for post in user.posts]})
+        else:
+            abort(404)
+
+    def post(self, nickname):
+        user = User.query.filter_by(nickname=nickname).first()
+        if user.api_key != self.reqparse.parse_args()['api_key']:
+            return {"result": "deny,api_key　is not fit"}
+        if user:
+            post = Post(
+            body = self.reqparse.parse_args()['body'],
+            timestamp = datetime.utcnow(),
+            author = user
+            )
+            db.session.add(post)
+            db.session.commit()
+            return {'result': 'new post had been post'}
+        else:
+            abort(404)
+api.add_resource(PostListApi, '/api/restful/posts/<nickname>', endpoint='restful_api')

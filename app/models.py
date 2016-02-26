@@ -3,6 +3,7 @@ from app import app, db
 from markdown import markdown
 import bleach
 from werkzeug.security import generate_password_hash, check_password_hash
+import hashlib
 
 import sys
 if sys.version_info >= (3, 0):
@@ -20,6 +21,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nickname = db.Column(db.String(64), index=True, unique=True)
     hash_psw = db.Column(db.String(128))
+    api_key = db.Column(db.String(40))
     email = db.Column(db.String(128))
     email_confirm = db.Column(db.Boolean)
     about_me = db.Column(db.String(140))
@@ -54,6 +56,8 @@ class User(db.Model):
     def verify_password(self, password):
         return check_password_hash(self.hash_psw, password)
 
+    def generate_api_key(self):
+        self.api_key = hashlib.sha1(self.nickname+app.config['SALT']).hexdigest()
 
     def avatar(self, size):
         return 'http://7xpqi6.com1.z0.glb.clouddn.com/avatar' + str(int(self.id)%23 + 6) + '.png-size' + str(size)

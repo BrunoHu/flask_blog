@@ -3,6 +3,7 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.pagedown import PageDown
+from flask.ext.restful import Api
 import os
 from flask.ext.mail import Mail
 from flask.ext.login import LoginManager
@@ -11,6 +12,7 @@ from momentjs import momentjs
 
 
 app = Flask(__name__, instance_relative_config=True)
+api = Api(app)
 app.config.from_object('config')
 app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
