@@ -57,7 +57,7 @@ class User(db.Model):
         return check_password_hash(self.hash_psw, password)
 
     def generate_api_key(self):
-        self.api_key = hashlib.sha1(self.id+app.config['SALT']).hexdigest()
+        self.api_key = hashlib.sha1(str(self.id)+app.config['SALT']).hexdigest()
 
     def avatar(self, size):
         return 'http://7xpqi6.com1.z0.glb.clouddn.com/avatar' + str(int(self.id)%23 + 6) + '.png-size' + str(size)
