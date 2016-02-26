@@ -337,8 +337,9 @@ def resume():
 
 @app.route('/generate_api_key')
 def generate_api_key():
-    g.user.generate_api_key()
-    db.session.add(g.user)
+    user = g.user
+    user.generate_api_key()
+    db.session.add(user)
     db.session.commit()
     return redirect(url_for('account'))
 
